@@ -46,3 +46,7 @@ label
 	font-family: sans-serif;
 	font-size: .8rem;
 }
+
+.author {
+	text-decoration: underline
+}
