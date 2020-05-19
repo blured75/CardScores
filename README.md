@@ -12,3 +12,11 @@ DELETE /part/x/score_line/y
 ** screens **
 1. Create a new game
 2. Load a game
+
+** Prerequisite **
+Have a mongo locally installed
+
+** install **
+$ npm install
+
+$ node server/app.js
