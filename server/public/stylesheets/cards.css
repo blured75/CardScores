@@ -50,3 +50,13 @@ label
 .author {
 	text-decoration: underline
 }
+
+#tweet-details {
+	display: none;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: white;
+	top: 0;
+	bottom: 0;
+}

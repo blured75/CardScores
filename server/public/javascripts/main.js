@@ -3,7 +3,13 @@
 		interpolate: /\{\{(.+?)\}\}/g
 	};
 
+	
+	
+	var tweetsView, tweetDetailsView;
+
 	var Tweet = Backbone.Model.extend({
+	//	idAttribute = '_id',
+		urlRoot: '/tweets',
 		defaults: function() {
 			return {
 				author: '',
@@ -11,7 +17,10 @@
 			}
 		}
 	});
+
+	Tweet.prototype.idAttribute = '_id';
 	
+	// collection
 	var TweetsList = Backbone.Collection.extend({
 		model: Tweet, 
 		url: '/tweets'
@@ -24,6 +33,7 @@
 		tagName: 'div',
 		events: {
 			'click .edit': 'edit',
+			'click .details': 'details',
 			'click .delete': 'delete',
 			'blur .status': 'close',
 			'keypress .status': 'onEnterUpdate'
@@ -35,9 +45,24 @@
 			ev.preventDefault();
 			this.$('.status').attr('contenteditable', true).focus();
 		},
+		details: function(ev) {
+			var target = $(ev.currentTarget);
+			ev.preventDefault();
+			console.log('navigate to target', target);
+			console.log(target.attr('href'));
+      router.navigate(target.attr('href'), {trigger: true});
+		},
 		close: function(ev) {
 			var status = this.$('.status').text();
-			this.model.set('.status', status);
+			var self = this;
+			this.model.save({status: status}, {
+				success: function() {
+					console.log('Successfully updated tweet ' + self.model.id);
+				},
+				error: function() {
+					console.log('Failed to update tweet with id ' + self.model.id);
+				}
+			})
 			this.$('.status').removeAttr('contenteditable')
 		},
 		onEnterUpdate: function(ev) {
@@ -50,9 +75,13 @@
 		},
 		delete: function(ev) {
 			ev.preventDefault();
-			tweets.remove(this.model);
+			this.model.destroy({ // delete tweetModel then remove model from tweets collection
+				success: function() { tweets.remove(this.model)},
+				error: function() { console.log('Failed to remove tweet with id ' + this.model.id)}
+			})
 		},
 		render: function() {
+			console.log(this.model.toJSON());
 			this.$el.html(this.template(this.model.toJSON()));
 			return this;
 		}
@@ -83,21 +112,80 @@
 				self.$el.append((new TweetView({model: tweet})).render().$el);
 			});
 			return this;
+		},
+		hide: function(ev) {
+			this.$el.hide();
+		},
+		show: function(model) {
+			this.$el.show();
+		},
+	});
+
+	var TweetDetailsView = Backbone.View.extend({
+		el: $('#tweet-details'),
+		events: {
+			'click .back': 'back'
+		},
+		initialize: function() {
+			this.template = _.template($('#tweet-details-template').html());
+		},
+		back: function(ev) {
+			ev.preventDefault();
+			router.navigate('', { trigger: true });
+		},
+		hide: function(ev) {
+			this.$el.hide();
+		},
+		show: function(model) {
+			this.model = model;
+			this.render();
+			this.$el.show();
+		},
+		render: function() {
+			this.$el.html(this.template(this.model.toJSON()));
+			return this;
 		}
 	});
 
+	var Router = Backbone.Router.extend({
+		routes: {
+			'': 'index',
+			'tweets/:id': 'show'
+		},
+		index: function() {
+			tweetDetailsView.hide();
+			tweetsView.show();
+		},
+		show: function(id) {
+			model = new Tweet({ _id: id});
+			model.fetch({
+				success: function() {
+					tweetDetailsView.show(model);
+					tweetsView.hide();
+				},
+				error: function(error) { console.log('failed to fetch tweet'); }
+
+			});
+		}
+	});
+
+	var router = new Router();
+
 	$(document).ready(function() {
 		$('#new-tweet').submit(function(ev) {
+			ev.preventDefault();
 			var tweet = new Tweet({ author: $('#author-name').val(), status: $('#status-update').val()});	
-			tweets.add(tweet);
+			
 			tweet.save({}, {
-				success: function() { console.log('successfully saved tweet'); },
+				success: function() { console.log('successfully saved tweet'); tweets.add(tweet);},
 				error: function() { console.log('Error saving tweet'); }
 			});
 
 			return false;
 		});
 
-		var appView = new TweetsView();
+		tweetsView = new TweetsView();
+		tweetDetailsView = new TweetDetailsView();
+		Backbone.history.start({});
 	});
 })(jQuery);

@@ -59,12 +59,21 @@
 	<hr/>
 
 	<div id="tweets-container"></div>
+	<div id="tweet-details"></div>
 
 	<script type="text/template" id="tweet-template">
 		<span class="author">{{ author }}:</span>: 
 		<span class="status">{{ status }}</span>
+		<a href="/tweets/{{ _id }}" class="details">[details]</a>
 		<a href="#" class="edit">[edit]</a>
 		<a href="#" class="delete">[delete]</a>
+	</script>
+
+	<script type="text/template" id="tweet-details-template">
+		<h2 class="status">{{ status }}</h2>
+		<h4 class="author">{{ author }}:</h4> 
+		
+		<a href="#" class="back">[back]</a>
 	</script>
 
 	<script type = "text/javascript" src = "/javascripts/main.js"></script>
