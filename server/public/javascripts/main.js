@@ -61,7 +61,7 @@
 			var self = this;
 			this.model.save({name: name, players: players, creation_date: creation_date}, {
 				success: function() {
-					console.log('Successfully updated card_party ' + self.model.id);
+					console.log('Successfully updated card_partty ' + self.model.id);
 				},
 				error: function() {
 					console.log('Failed to update card_party with id ' + self.model.id);
