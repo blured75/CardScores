@@ -10,47 +10,48 @@
 	<title>Liste des parties</title>
 </head>
 <body>
-	<table class="center">
-    <thead>
-        <tr>
-            <th scope="col">Nom de la partie</th>
-						<th scope="col">Joueurs</th>
-						<th scope="col">Date de début</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th scope="row"><a href="part/rummy_dovenfleet.html">RummyKube Dovenfleet</a></th>
-						<td>Sotiria, Denis, Eva</td>	
-						<td>11/01/2020</td>
-        </tr>
-        <tr>
-            <th scope="row"><a href="part/uno_dovenfleet.html">Uno Dovenfleet</a></th>
-						<td>Sotiria, Denis, Eva</td>	
-						<td>15/05/2020</td>
-				</tr>
-				<tr>
-					<th scope="row"><a href="part/tavli_dovenfleet.html">Tavli Dovenfleet</a></th>
-					<td>Sotiria, Denis</td>	
-					<td>12/04/2020</td>
-				</tr>
-    </tbody>
-	</table>
+	
 	<br><br><br><br><br>
 	<div class="center">
 		<form id="new-card-part">
-			<label>Nom de la partie :</label><input type="text" /><br />
-			<label>Joueurs (séparés par ,) :</label><input type="text" /><br />
+			<label>Nom de la partie :</label><input type="text" id="name" name="name"/><br />
+			<label>Joueurs (séparés par ,) :</label><input type="text" id="players" name="players"/><br />
+			<label>Date de création :</label><input type="text" id="creation_date" name="creation_date"/><br />
 			<button>+ Créer une partie +</button>
 		</form>
 	</div>
 	<hr/>
 
-	<div id="card-parties"></div>
-	<div id="party-details"></div>
-	
+	<div id="card-parties-container"></div>
+	<div id="card-party-details"></div>
+
+	<script type="text/template" id="card-party-template">
+		<span class="name">{{ name }}</span>
+		<span class="players">{{ players}}</span>
+		<span class="creation_data">{{ creation_date}}</span>
+		<a href="#" class="save_update">[Save]</a>
+		<a href="/card_party/{{ _id }}" class="details">[details]</a>
+		<a href="#" class="edit-card-party">[edit]</a>
+		<a href="#" class="delete">[delete]</a>
+	</script>
+
+	<script type="text/template" id="card-party-details-template">
+		<span class="name">{{ name }}</span>
+		<span class="players">
+			<ul>
+				<li>
+				{{ players.split(',').forEach(player => { console.log(player); return player }) }}
+				{{ players }}
+				</li>
+			</ul>
+		</span>
+		<span class="creation_data">{{ creation_date }}</span>
+		
+		<a href="#" class="back">[back]</a>
+	</script>
 
 	<br><br><br><br><br>
+
 	<hr/>
 	<div class="center">
 		<form id="new-tweet">
