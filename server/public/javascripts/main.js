@@ -3,12 +3,13 @@
 		interpolate: /\{\{(.+?)\}\}/g
 	};
 
+	// card parties
 	
-	
+
+	// Tweets
 	var tweetsView, tweetDetailsView;
 
 	var Tweet = Backbone.Model.extend({
-	//	idAttribute = '_id',
 		urlRoot: '/tweets',
 		defaults: function() {
 			return {

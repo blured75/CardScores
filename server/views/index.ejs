@@ -10,9 +10,6 @@
 	<title>Liste des parties</title>
 </head>
 <body>
-	<div id="container" class="center">Loading...</div>
-	<div id="ListeDeTaches" class="center">Loading...</div>
-
 	<table class="center">
     <thead>
         <tr>
@@ -41,13 +38,19 @@
 	</table>
 	<br><br><br><br><br>
 	<div class="center">
-		<form>
+		<form id="new-card-part">
 			<label>Nom de la partie :</label><input type="text" /><br />
 			<label>Joueurs (séparés par ,) :</label><input type="text" /><br />
 			<button>+ Créer une partie +</button>
 		</form>
 	</div>
+	<hr/>
 
+	<div id="card-parties"></div>
+	<div id="party-details"></div>
+	
+
+	<br><br><br><br><br>
 	<hr/>
 	<div class="center">
 		<form id="new-tweet">
